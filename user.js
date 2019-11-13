@@ -51,6 +51,25 @@ function editCore(core) {
     return core;
 }
 
+
+window.draw = () => {
+  if (!window.minX || !window.minY || !window.maxY || !window.maxY) return;
+  const ctx = document.getElementById('canvas').getContext('2d');
+  ctx.save();
+  ctx.strokeStyle = '#0000ff';
+  ctx.lineWidth = 20;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(window.minX, window.minY);
+  ctx.lineTo(window.maxX, window.minY);
+  ctx.lineTo(window.maxX, window.maxY);
+  ctx.lineTo(window.minX, window.maxY);
+  ctx.closePath();
+  ctx.stroke();
+  ctx.restore();
+}
+
 let observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
@@ -187,7 +206,7 @@ class Bot {
         this.protocolVersion = 22;
         this.nodes = new Array();
         this.node = new Object();
-        this.protocolKey = 31002;
+        this.protocolKey = 31003;
         this.encryptionKey = 0;
         this.decryptionKey = 0;
         this.serverIP = server;
@@ -382,7 +401,6 @@ class Bot {
             let node = this.nodes[nodeId];
             let dist = Math.hypot(node.x - botNode.x, node.y - botNode.y)
             if (dist < bestDist & (node.size < botNode.size * 0.85 || node.isFood)) {
-                console.log(node)
                 bestDist = dist;
                 nearestFood = node;
             }
